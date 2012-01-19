@@ -1,24 +1,50 @@
 
 package org.apache.deltaspike.forge;
 
+import org.jboss.forge.project.Project;
+import org.jboss.forge.project.facets.events.InstallFacets;
+import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.ShellPrompt;
 import org.jboss.forge.shell.plugins.*;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 /**
  * @author Rudy De Busscher
  */
 @Alias("deltaspike")
+@RequiresProject
 public class DeltaspikePlugin implements Plugin
 {
    @Inject
    private ShellPrompt prompt;
+
+    private final Project project;
+
+    private final Event<InstallFacets> installFacets;
+
+    @Inject
+    public DeltaspikePlugin(final Project someProject, final Event<InstallFacets> someEvent) {
+        project = someProject;
+        installFacets = someEvent;
+    }
 
    @DefaultCommand
    public void defaultCommand(@PipeIn String in, PipeOut out)
    {
       out.println("Welcome to the DeltaSpike forge plugin.  Please recheck later when the functionality is implemented.");
    }
+
+    @Command("setup")
+    public void setup(final PipeOut out) {
+        if (!project.hasFacet(DeltaspikeFacet.class)) {
+            installFacets.fire(new InstallFacets(DeltaspikeFacet.class));
+        }
+        if (project.hasFacet(DeltaspikeFacet.class)) {
+            ShellMessages.success(out, "DeltaspikeFacet is configured.");
+        }
+    }
+
 
 }
