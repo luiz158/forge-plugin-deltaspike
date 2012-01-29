@@ -1,1 +1,5 @@
 Playground for the forge plugin supporting Apache incubator DeltaSpike project
+
+prerequisites
+- JBoss Forge beta 5
+- deltaspike dependency in local maven repository.

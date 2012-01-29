@@ -18,36 +18,42 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <dependency>
                 <groupId>org.jboss.forge</groupId>
                 <artifactId>forge-shell-api</artifactId>
                 <version>${forge.api.version}</version>
                 <scope>provided</scope>
             </dependency>
+
             <dependency>
                 <groupId>org.jboss.forge</groupId>
                 <artifactId>forge-javaee-api</artifactId>
                 <version>${forge.api.version}</version>
-
             </dependency>
 
             <dependency>
                 <groupId>org.jboss.forge</groupId>
                 <artifactId>forge-javaee-impl</artifactId>
                 <version>${forge.api.version}</version>
-
             </dependency>
+
+            <dependency>
+                <groupId>org.jboss.forge</groupId>
+                <artifactId>forge-maven-api</artifactId>
+                <version>${forge.api.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.jboss.forge</groupId>
                 <artifactId>forge-test-harness</artifactId>
                 <version>${forge.api.version}</version>
-
             </dependency>
+
             <dependency>
                 <groupId>org.jboss.forge</groupId>
                 <artifactId>forge-shell</artifactId>
                 <version>${forge.api.version}</version>
-
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -57,11 +63,13 @@
             <artifactId>cdi-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.jboss.spec.javax.annotation</groupId>
             <artifactId>jboss-annotations-api_1.1_spec</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.jboss.forge</groupId>
             <artifactId>forge-shell-api</artifactId>
@@ -72,24 +80,43 @@
             <groupId>org.jboss.forge</groupId>
             <artifactId>forge-javaee-api</artifactId>
             <scope>provided</scope>
+        </dependency>
 
+        <dependency>
+            <groupId>org.jboss.forge</groupId>
+            <artifactId>forge-maven-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.6.4</version>
         </dependency>
 
         <dependency>
             <groupId>org.jboss.forge</groupId>
             <artifactId>forge-javaee-impl</artifactId>
             <scope>test</scope>
-
         </dependency>
+
         <dependency>
             <groupId>org.jboss.forge</groupId>
             <artifactId>forge-test-harness</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.jboss.forge</groupId>
             <artifactId>forge-shell</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>r06</version>  <!-- To match the JBoss Forge version -->
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <repositories>

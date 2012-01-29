@@ -20,8 +20,6 @@ import javax.inject.Inject;
 @Alias("org.apache.deltaspike")
 @RequiresFacet({DependencyFacet.class, CDIFacet.class})
 public class DeltaspikeFacet extends BaseFacet {
-    
-    private static final String VERSION ="incubating-0.1-SNAPSHOT";
 
     @Inject
     private ShellPrintWriter writer;
@@ -52,12 +50,12 @@ public class DeltaspikeFacet extends BaseFacet {
 
         writer.println();
 
-        Dependency apiVersion = api.setVersion(VERSION);
+        Dependency apiVersion = api.setVersion(DeltaspikeModule.VERSION);
 
         deps.addDirectDependency(apiVersion);
 
         if (impl != null) {
-            deps.addDirectDependency(impl.setVersion(VERSION).setScopeType(ScopeType.RUNTIME));
+            deps.addDirectDependency(impl.setVersion(DeltaspikeModule.VERSION).setScopeType(ScopeType.RUNTIME));
         }
 
         ShellMessages.info(writer, "'" + dependency + "' added to dependencies list");

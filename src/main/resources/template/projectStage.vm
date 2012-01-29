@@ -1,0 +1,14 @@
+package ${basePackage}.projectstage;
+
+import org.apache.deltaspike.core.api.projectstage.ProjectStage;
+import org.apache.deltaspike.core.api.projectstage.ProjectStageHolder;
+
+public class ${customProjectStageName}Holder implements ProjectStageHolder
+{
+    public static final class ${customProjectStageName} extends ProjectStage
+    {
+         ${serialVersionUID}
+    }
+
+    public static final ${customProjectStageName} ${customProjectStage} = new ${customProjectStageName}();
+}
