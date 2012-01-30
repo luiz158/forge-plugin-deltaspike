@@ -3,8 +3,11 @@ package ${basePackage}.projectstage;
 import org.apache.deltaspike.core.api.projectstage.ProjectStage;
 import org.apache.deltaspike.core.api.projectstage.ProjectStageHolder;
 
+import javax.enterprise.inject.Typed;
+
 public class ${customProjectStageName}Holder implements ProjectStageHolder
 {
+    @Typed
     public static final class ${customProjectStageName} extends ProjectStage
     {
          ${serialVersionUID}

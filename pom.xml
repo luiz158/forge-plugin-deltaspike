@@ -46,6 +46,12 @@
 
             <dependency>
                 <groupId>org.jboss.forge</groupId>
+                <artifactId>forge-project-model-maven</artifactId>
+                <version>${forge.api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.forge</groupId>
                 <artifactId>forge-test-harness</artifactId>
                 <version>${forge.api.version}</version>
             </dependency>
@@ -116,6 +122,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>r06</version>  <!-- To match the JBoss Forge version -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.forge</groupId>
+            <artifactId>forge-project-model-maven</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

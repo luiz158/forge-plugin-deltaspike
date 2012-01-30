@@ -7,6 +7,7 @@ import org.apache.deltaspike.forge.helper.CompilerHelper;
 import org.apache.deltaspike.forge.helper.MavenHelper;
 import org.apache.deltaspike.forge.helper.SerialverHelper;
 import org.apache.deltaspike.forge.template.TemplateEvaluator;
+import org.jboss.forge.maven.facets.MavenResourceFacet;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.dependencies.DependencyBuilder;
 import org.jboss.forge.project.facets.JavaSourceFacet;
@@ -18,7 +19,7 @@ import java.io.File;
 
 /**
  * @author Rudy De Busscher
- * FIXME Clean up the class.
+ *         FIXME Clean up the class.
  */
 public final class ProjectStage {
 
@@ -28,10 +29,12 @@ public final class ProjectStage {
     }
 
     public static void createCustomProjectStage(final Project project, final String javaClassName) {
-        createJavaClass(project, javaClassName);
+        JavaSourceFacet sourceFacet = project.getFacet(JavaSourceFacet.class);
+        createJavaClass(project, sourceFacet, javaClassName);
+        createServiceProviderFile(project, sourceFacet, javaClassName);
     }
 
-    private static void createJavaClass(Project someProject, String someJavaClassName) {
+    private static void createJavaClass(Project someProject, JavaSourceFacet someSourceFacet, String someJavaClassName) {
 
         // FIXME split in smaller parts.
 
@@ -39,14 +42,12 @@ public final class ProjectStage {
 
         String variableName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, someJavaClassName);
 
-        JavaSourceFacet source = someProject.getFacet(JavaSourceFacet.class);
-        evaluator.addParameters("basePackage", source.getBasePackage());
+        evaluator.addParameters("basePackage", someSourceFacet.getBasePackage());
         evaluator.addParameters("customProjectStageName", someJavaClassName);
         evaluator.addParameters("customProjectStage", variableName);
         evaluator.addParameters("serialVersionUID", "");
 
         String javaSource = evaluator.evaluateToString(VELOCITY_TEMPLATE_NAME_CUSTOM_PROJECTSTAGE);
-
 
         MavenHelper mavenHelper = MavenHelper.getInstance(someProject);
 
@@ -57,11 +58,10 @@ public final class ProjectStage {
 
         File cdiApiJar = mavenHelper.resolve(TransientDependency.CDI_API.getDependency().toCoordinates());
 
-
         Long serialver = null;
         try {
-            String javaClassName = defineFullJavaClassName(someJavaClassName, source, false);
-            String javaClassNameInner = defineFullJavaClassName(someJavaClassName, source, true);
+            String javaClassName = defineFullJavaClassName(someJavaClassName, someSourceFacet, false);
+            String javaClassNameInner = defineFullJavaClassName(someJavaClassName, someSourceFacet, true);
             JavaFileManager fileManager = CompilerHelper.create().withDependencies(coreApiJar,
                     cdiApiJar).compile(javaClassName, javaSource);
 
@@ -71,14 +71,24 @@ public final class ProjectStage {
             e.printStackTrace();
         }
 
-
-        DirectoryResource sourceRoot = source.getBasePackageResource();
+        DirectoryResource sourceRoot = someSourceFacet.getBasePackageResource();
         DirectoryResource projectStagePackage = sourceRoot.getOrCreateChildDirectory("projectstage");
         FileResource<?> javaFile = (FileResource<?>) projectStagePackage.getChild(someJavaClassName + "Holder.java");
 
-        evaluator.addParameters("serialVersionUID", "private static final long serialVersionUID = " + serialver+"L;");
+        evaluator.addParameters("serialVersionUID", "private static final long serialVersionUID = " + serialver + "L;" +
+                "");
         javaFile.setContents(evaluator.evaluate(VELOCITY_TEMPLATE_NAME_CUSTOM_PROJECTSTAGE));
 
+    }
+
+    private static void createServiceProviderFile(Project someProject, JavaSourceFacet someSourceFacet, String someJavaClassName) {
+        //someProject.getProjectRoot().getOrCreateChildDirectory(
+        MavenResourceFacet facet = someProject.getFacet(MavenResourceFacet.class);
+        DirectoryResource services = facet.getResourceFolder().getOrCreateChildDirectory("META-INF")
+                .getOrCreateChildDirectory("services");
+        FileResource serviceFile = services.getChild("org.apache.deltaspike.core.api.projectstage.ProjectStageHolder")
+                .reify(FileResource.class);
+        serviceFile.setContents(defineFullJavaClassName(someJavaClassName, someSourceFacet, false));
     }
 
     private static String defineFullJavaClassName(String someJavaName, JavaSourceFacet someSource,
