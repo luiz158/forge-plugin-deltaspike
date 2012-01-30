@@ -2,6 +2,7 @@ package org.apache.deltaspike.forge;
 
 import com.google.common.base.CaseFormat;
 import org.apache.deltaspike.forge.projectstage.ProjectStage;
+import org.apache.deltaspike.forge.projectstage.ProjectStageTokenCompleter;
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.events.InstallFacets;
@@ -58,6 +59,12 @@ public class DeltaspikePlugin implements Plugin {
         // TODO Check if the javaName is valid name for a java class.
         // TODO Verify if the filename doesn't exist already.
         ProjectStage.createCustomProjectStage(project, javaName);
+    }
+
+    @Command("define-project-stage")
+    public void defineProjectStageWithProperties(@Option(name="name", completer = ProjectStageTokenCompleter.class) final String projectStageName, final PipeOut out) {
+        // TODO Verifiy if the projectStageName is a valid one.
+        ProjectStage.defineProjectStageWithProperties(project, projectStageName);
     }
 
 

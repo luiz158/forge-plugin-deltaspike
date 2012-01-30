@@ -34,7 +34,17 @@ public final class ProjectStage {
         createServiceProviderFile(project, sourceFacet, javaClassName);
     }
 
-    private static void createJavaClass(Project someProject, JavaSourceFacet someSourceFacet, String someJavaClassName) {
+    public static void defineProjectStageWithProperties(final Project project, final String projectStageName) {
+        MavenResourceFacet facet = project.getFacet(MavenResourceFacet.class);
+        DirectoryResource metaInf = facet.getResourceFolder().getOrCreateChildDirectory("META-INF");
+        // TODO Don't override the contents of the properties file
+        FileResource serviceFile = metaInf.getChild("apache-deltaspike.properties").reify(FileResource.class);
+        serviceFile.setContents("org.apache.deltaspike.ProjectStage=" + projectStageName);
+
+    }
+
+    private static void createJavaClass(Project someProject, JavaSourceFacet someSourceFacet,
+                                        String someJavaClassName) {
 
         // FIXME split in smaller parts.
 
@@ -75,14 +85,14 @@ public final class ProjectStage {
         DirectoryResource projectStagePackage = sourceRoot.getOrCreateChildDirectory("projectstage");
         FileResource<?> javaFile = (FileResource<?>) projectStagePackage.getChild(someJavaClassName + "Holder.java");
 
-        evaluator.addParameters("serialVersionUID", "private static final long serialVersionUID = " + serialver + "L;" +
-                "");
+        evaluator.addParameters("serialVersionUID", "private static final long serialVersionUID = " + serialver + "L;");
         javaFile.setContents(evaluator.evaluate(VELOCITY_TEMPLATE_NAME_CUSTOM_PROJECTSTAGE));
 
     }
 
-    private static void createServiceProviderFile(Project someProject, JavaSourceFacet someSourceFacet, String someJavaClassName) {
-        //someProject.getProjectRoot().getOrCreateChildDirectory(
+    private static void createServiceProviderFile(Project someProject, JavaSourceFacet someSourceFacet,
+                                                  String someJavaClassName) {
+
         MavenResourceFacet facet = someProject.getFacet(MavenResourceFacet.class);
         DirectoryResource services = facet.getResourceFolder().getOrCreateChildDirectory("META-INF")
                 .getOrCreateChildDirectory("services");
