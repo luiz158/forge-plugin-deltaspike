@@ -1,6 +1,8 @@
 package org.apache.deltaspike.forge;
 
 import com.google.common.base.CaseFormat;
+import org.apache.deltaspike.forge.overview.ClassInformation;
+import org.apache.deltaspike.forge.overview.ProjectOverview;
 import org.apache.deltaspike.forge.projectstage.ProjectStage;
 import org.apache.deltaspike.forge.projectstage.ProjectStageTokenCompleter;
 import org.jboss.forge.maven.MavenCoreFacet;
@@ -12,6 +14,7 @@ import org.jboss.forge.shell.plugins.*;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * @author Rudy De Busscher
@@ -62,10 +65,24 @@ public class DeltaspikePlugin implements Plugin {
     }
 
     @Command("define-project-stage")
-    public void defineProjectStageWithProperties(@Option(name="name", completer = ProjectStageTokenCompleter.class) final String projectStageName, final PipeOut out) {
+    public void defineProjectStageWithProperties(@Option(name = "name", completer = ProjectStageTokenCompleter.class)
+                                                     final String projectStageName, final PipeOut out) {
         // TODO Verifiy if the projectStageName is a valid one.
         ProjectStage.defineProjectStageWithProperties(project, projectStageName);
     }
 
+    @Command("verify-project-stage")
+    public void verifyProjectStage() {
+
+        ProjectOverview projectOverview = new ProjectOverview(project);
+        List<ClassInformation> informationList = projectOverview.getClassInformationList();
+        for (ClassInformation classInformation : informationList) {
+            System.out.println(classInformation.getSimpleName() + " / " + classInformation.getQualifiedName());
+            System.out.println("   super type = " + classInformation.getSuperType());
+            for (String interfaceName : classInformation.getInterfaceTypes()) {
+                System.out.println("   interface = " + interfaceName);
+            }
+        }
+    }
 
 }
