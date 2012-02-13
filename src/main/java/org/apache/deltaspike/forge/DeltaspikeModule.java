@@ -8,7 +8,7 @@ import org.apache.deltaspike.forge.util.DeltaspikeDependency;
 public enum DeltaspikeModule {
     CORE(new DeltaspikeDependency("Deltaspike Core", "core", "deltaspike-core-api", "deltaspike-core-impl"));
 
-    public static final String VERSION ="incubating-0.1-SNAPSHOT";
+    public static final String VERSION ="0.1-incubating-SNAPSHOT";
 
     // It is no problem that this property isn't serializable.
     private DeltaspikeDependency dependency;
