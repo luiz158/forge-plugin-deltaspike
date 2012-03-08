@@ -1,12 +1,16 @@
 package org.apache.deltaspike.forge.resource;
 
+import com.google.common.collect.Sets;
 import org.jboss.forge.project.services.ResourceFactory;
 import org.jboss.forge.resources.FileResource;
 import org.jboss.forge.resources.Resource;
 import org.jboss.forge.resources.ResourceHandles;
 
 import javax.inject.Inject;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -48,7 +52,7 @@ public class PropertiesResource extends FileResource<PropertiesResource> {
     
     public Set<String> keyValues() {
         // Don't want to use 1.6 functionality here (yet)
-        Set<String> result = new HashSet<String>();
+        Set<String> result = Sets.newHashSet();
         Enumeration<?> enumeration = properties.propertyNames();
         while (enumeration.hasMoreElements()) {
             result.add((String) enumeration.nextElement());
@@ -85,4 +89,6 @@ public class PropertiesResource extends FileResource<PropertiesResource> {
     public List<Resource<?>> listResources() {
        return Collections.emptyList();
     }
+
+
 }

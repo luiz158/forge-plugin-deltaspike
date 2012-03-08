@@ -63,7 +63,7 @@ public class CompilerHelper {
         if (!task.call()) {
             // FIXME
             System.out.println("Does not compile ");
-            System.out.println(javaSource.toString());
+            System.out.println(javaSource);
             for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
                 System.out.println(diagnostic.getCode());
                 System.out.println(diagnostic.getKind());
